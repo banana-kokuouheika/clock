@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アナログ時計</title>
+  <style>
+    #clock {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border: 5px solid black;
+      border-radius: 50%;
+    }
+    .hand {
+      position: absolute;
+      width: 50%;
+      height: 2px;
+      background-color: black;
+      top: 50%;
+      transform-origin: 100%;
+    }
+    .second-hand {
+      background-color: skyblue;
+    }
+  </style>
+</head>
+<body>
+  <div id="clock">
+    <div id="hour-hand" class="hand"></div>
+    <div id="minute-hand" class="hand"></div>
+    <div id="second-hand" class="hand second-hand"></div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+
+      const hourDeg = (hours % 12) * 30 + minutes * 0.5;
+      const minuteDeg = minutes * 6 + seconds * 0.1;
+      const secondDeg = seconds * 6;
+
+      const hourHand = document.getElementById("hour-hand");
+      const minuteHand = document.getElementById("minute-hand");
+      const secondHand = document.getElementById("second-hand");
+
+      hourHand.style.transform = `rotate(${hourDeg}deg)`;
+      minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+      secondHand.style.transform = `rotate(${secondDeg}deg)`;
+
+      setTimeout(updateClock, 1000);
+    }
+
+    updateClock();
+function displayTimeWithTimeZone(timeZone) {
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat('ja-JP', {
+    timeZone: timeZone,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+  console.log(formatter.format(now));
+}
+displayTimeWithTimeZone('Asia/Osaka');
+  </script>
+</body>
+</html>
