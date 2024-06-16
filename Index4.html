@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アラーム機能</title>
+</head>
+<body>
+  <input type="time" id="alarmTime">
+  <button id="setAlarm">アラームを設定</button>
+  <audio id="alarmSound" src="alarm.mp3" preload="auto"></audio>
 
+  <script>
+    let alarmTimeoutId = null;
+    const alarmTimeInput = document.getElementById("alarmTime");
+    const alarmSound = document.getElementById("alarmSound");
+
+    function checkAlarm() {
+      const now = new Date();
+      const alarmTimeString = alarmTimeInput.value;
+
+      if (!alarmTimeString) return;
+
+      const alarmTime = new Date(now);
+      const [hours, minutes] = alarmTimeString.split(":");
+      alarmTime.setHours(hours);
+      alarmTime.setMinutes(minutes);
+      alarmTime.setSeconds(0);
+      alarmTime.setMilliseconds(0);
+
+      if (now >= alarmTime) {
+        alarmSound.play();
+        alarmTimeoutId = null;
+      } else {
+        alarmTimeoutId = setTimeout(checkAlarm, 1000);
+      }
+    }
+
+    document.getElementById("setAlarm").addEventListener("click", () => {
+      clearTimeout(alarmTimeoutId);
+      checkAlarm();
+    });
+  </script>
+</body>
+</html>
